@@ -1,0 +1,52 @@
+{{/*<!DOCTYPE html>*/}}
+{{/*<html lang="en">*/}}
+	{{/*<head>*/}}
+		{{/*<title>Not found</title>*/}}
+	{{/*</head>*/}}
+	{{/*<body>*/}}
+{{/*{{if eq .RunMode "dev"}}*/}}
+{{/*{{template "errors/404-dev.html" .}}*/}}
+{{/*{{else}}*/}}
+	{{/*{{with .Error}}*/}}
+	{{/*<h1>*/}}
+		{{/*{{.Title}}*/}}
+	{{/*</h1>*/}}
+	{{/*<p>*/}}
+		{{/*{{.Description}}*/}}
+	{{/*</p>*/}}
+	{{/*{{end}}*/}}
+{{/*{{end}}*/}}
+	{{/*</body>*/}}
+{{/*</html>*/}}
+
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="EUC-JP" />
+    <title>404 File Not Found</title>
+    <meta name="copyright" content="Copyright XSERVER Inc.">
+    <meta name="robots" content="INDEX,FOLLOW" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
+    <link rel="stylesheet" type="text/css" href=" /public/css/error.css">
+</head>
+
+<body>
+<div id="base">
+    <h1><span>404</span><br />
+        File Not Found</h1>
+    <h2>アクセスしようとしたページは見つかりませんでした。</h2>
+    <p class="explain">このエラーは、指定したページが見つからなかったことを意味します。</p>
+    <h3>以下のような原因が考えられます。</h3>
+    <div id="white_box">
+        <div id="cause">
+            <ul>
+                <li>アクセスしようとしたファイルが存在しない（ファイルの設置箇所を誤っている）。</li>
+                <li>URLアドレスが間違っている。</li>
+            </ul>
+        </div>
+    </div>
+    <!--//base--></div>
+</body>
+</html>
+

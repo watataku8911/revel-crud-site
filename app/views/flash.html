@@ -1,0 +1,21 @@
+{{if .flash.success}}
+<div class="alert alert-success">
+	{{.flash.success}}
+</div>
+{{end}}
+
+{{if or .errors .flash.error}}
+<div class="alert alert-danger">
+	{{if .flash.error}}
+		{{.flash.error}}
+	{{end}}
+		<section id="errorMsg">
+            <p class="err">＜以下のメッセージをご確認ください。＞</p>
+			<ul>
+				{{range .errors}}
+					<li>{{.}}</li>
+				{{end}}
+			</ul>
+		</section>
+</div>
+{{end}}

@@ -1,0 +1,42 @@
+@charset "UTF-8";
+table{
+    border-collapse: collapse;
+}
+table th{
+    border:solid 1px black;
+}
+table td{
+    border:solid 1px black;
+}
+nav ul li{
+    display: inline;
+    list-style-type: none;
+}
+nav ul .current{
+    color: red;
+}
+nav ul li:before{
+    content:">";
+}
+nav ul li:first-child:before{
+    content:none;
+}
+.submit{
+    text-align: center;
+}
+.required{
+    color: red;
+    font-size: 20px;
+}
+#errorMsg{
+    border:solid 1px orange;
+    color: red;
+    padding: 10px;
+    margin:20px;
+    width: 400px;
+}
+
+#errorMsg .err {
+    text-align: center;
+    color: #31708f;
+}

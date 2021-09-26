@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <title>部門情報追加｜ScottAdmin</title>
+    <link rel="stylesheet" type="text/css" href=" /public/css/main.css">
+    <meta charset="utf-8">
+</head>
+<body>
+<h1>部門情報追加</h1>
+<nav>
+    <ul>
+        <li><a href=" /">TOP</a></li>
+        <li><a href=" /App/DeptList">部門リスト</a></li>
+        <li>部門情報追加</li>
+    </ul>
+</nav>
+
+
+
+<section>
+    <p>情報を入力し、登録ボタンをクリックしてください</p>
+    {{template "flash.html" .}}
+
+    <form action=" /App/DeptAdd" method="post">
+        <table>
+            <tbody>
+            <tr>
+                <th>部門番号&nbsp;<span class="required">必須</span></th>
+                {{ with $field := field "addDeptDeptno" . }}
+                <td><input type="text" name="addDeptDeptno" id="addDeptDeptno" placeholder="数値二桁以上" value="{{ $field.Flash }}"></td>
+                {{ end }}
+            </tr>
+            <tr>
+                <th>部門名&nbsp;<span class="required">必須</span></th>
+                {{ with $field := field "addDeptDname" . }}
+                <td><input type="text" name="addDeptDname" id="addDeptDname" value="{{ $field.Flash }}" ></td>
+                {{ end }}
+            </tr>
+            <tr>
+                <th>所在地</th>
+                {{ with $field := field "addDeptLoc" . }}
+                <td><input type="text" name="addDeptLoc" id="addDeptLoc" value="{{ $field.Flash }}"></td>
+                {{ end }}
+            </tr>
+            <tr>
+                <td colspan="2" class="submit"><input type="submit" value="登録"></td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</section>
+</body>
+</html>

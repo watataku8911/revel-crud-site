@@ -1,0 +1,25 @@
+{{set . "title" "Home"}}
+{{template "header.html" .}}
+
+<header class="jumbotron" style="background-color:#A9F16C">
+  <div class="container">
+    <div class="row">
+      <h1>Hello {{ .message }}</h1>
+    </div>
+  </div>
+</header>
+        <ul>
+            <li><a href=" /App/DeptList" style="font-size: 20px">部門リスト</a></li>
+            <li><a href="#" style="font-size: 20px">従業員リスト</a></li>
+        </ul>
+
+{{/*<div class="container">*/}}
+  {{/*<div class="row">*/}}
+    {{/*<div class="span6">*/}}
+      {{/*{{template "flash.html" .}}*/}}
+    {{/*</div>*/}}
+  {{/*</div>*/}}
+{{/*</div>*/}}
+　
+
+{{template "footer.html" .}}
