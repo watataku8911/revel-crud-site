@@ -4,10 +4,10 @@ type Emp struct {
 	Empno int
   	Ename string
 	Job string
-	Mgr int
+	Mgr *int
 	Hiredate string
-	Sal int
-	Comm int
+	Sal string
+	Comm *string
 	Deptno int
 }
 

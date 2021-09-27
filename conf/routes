@@ -19,6 +19,10 @@ POST    /App/DeptAdd                            App.DeptAdd
 GET     /App/GoDeptEdit                         App.GoDeptEdit
 POST    /App/DeptEdit                           App.DeptEdit
 
+# -----------------------------------------------------------------------------
+
+GET     /App/EmpList                           App.EmpList
+
 
 # エラーページ
 GET     /App/Error                              App.Error
