@@ -1,4 +1,4 @@
-package entities
+package dept
 
 type Dept struct {
 	Deptno int
