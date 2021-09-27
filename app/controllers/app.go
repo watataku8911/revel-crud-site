@@ -7,7 +7,7 @@ import (
 	"log"
 	"regexp"
 	"revelTest/app/pkg/deptDAO"
-	//"revelTest/app/pkg/empDAO"
+	"revelTest/app/pkg/empDAO"
 )
 
 type App struct {
@@ -69,23 +69,6 @@ func (c App) ConfirmDeptDelete(deleteDeptDeptno string) revel.Result {
 	return c.Render(deptno, dname, loc)
 }
 
-func (c App) DeptDelete(deleteDeptDeptno string) revel.Result {
-	db, err := sql.Open("mysql", "scott:tiger@tcp(127.0.0.1:8889)/wp32scott")//通常：ポート番号３３０６、＊manp:8889
-	if err != nil {
-		log.Fatal(err)
-	}
-	err = db.Ping()
-	if err != nil {
-		fmt.Println("データベース接続失敗")
-		return c.Redirect(App.Error)
-	}
-	defer db.Close()
-
-
-	deptDAO.Delete(db,deleteDeptDeptno)
-	c.Flash.Success("部門番号：" + deleteDeptDeptno + "を削除しました。")
-	return c.Redirect(App.DeptList)
-}
 
 func (c App) GoDeptAdd() revel.Result {
 	return c.Render()
@@ -169,9 +152,80 @@ func (c App) DeptEdit(editDeptDeptno string, editDeptDname string, editDeptLoc s
 	return c.Redirect(App.DeptList)
 }
 
+func (c App) DeptDelete(deleteDeptDeptno string) revel.Result {
+	db, err := sql.Open("mysql", "scott:tiger@tcp(127.0.0.1:8889)/wp32scott")//通常：ポート番号３３０６、＊manp:8889
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = db.Ping()
+	if err != nil {
+		fmt.Println("データベース接続失敗")
+		return c.Redirect(App.Error)
+	}
+	defer db.Close()
+
+
+	deptDAO.Delete(db,deleteDeptDeptno)
+	c.Flash.Success("部門番号：" + deleteDeptDeptno + "を削除しました。")
+	return c.Redirect(App.DeptList)
+}
+
+
 // -------------------------------------------------------------------------------------------------------------------------------------------
 // ------------------------------------------------------------- Emp ----------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------------------------------------
+
+func (c App) EmpList() revel.Result {
+	db, err := sql.Open("mysql", "scott:tiger@tcp(127.0.0.1:8889)/wp32scott")//通常：ポート番号３３０６、＊manp:8889
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = db.Ping()
+	if err != nil {
+		fmt.Println("データベース接続失敗")
+		return c.Redirect(App.Error)
+	}
+
+	defer db.Close()
+	empList := empDAO.FindAll(db)
+	if empList == nil {
+		fmt.Println("から")
+	}
+	return c.Render(empList)
+
+}
+
+func (c App) GoEmpAdd() revel.Result {
+	return c.Render()
+}
+
+func (c App) EmpAdd(addEmpEmpno string, addDeptDname string, addDeptLoc string) revel.Result {
+	db, err := sql.Open("mysql", "scott:tiger@tcp(127.0.0.1:8889)/wp32scott")//通常：ポート番号３３０６、＊manp:8889
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = db.Ping()
+	if err != nil {
+		fmt.Println("データベース接続失敗")
+		return c.Redirect(App.Error)
+	}
+	defer db.Close()
+	c.Validation.Required(addDeptDeptno).Message("部門番号は必須です。")
+	c.Validation.Match(addDeptDeptno, regexp.MustCompile("^[0-9]{2.}")).Message("部門番号は数字二桁で入力して下さい。")
+
+	c.Validation.Required(addDeptDname).Message("部門名は必須です。")
+
+	if c.Validation.HasErrors() {
+		c.Validation.Keep()
+		c.FlashParams()
+		return c.Redirect(App.GoDeptAdd)
+	}
+
+	empDAO.Insert(db, addDeptDeptno, addDeptDname, addDeptLoc)
+	c.Flash.Success("部門番号：" + addDeptDeptno + "を追加しました。")
+
+	return c.Redirect(App.DeptList)
+}
 
 
 

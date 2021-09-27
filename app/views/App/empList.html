@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <title>従業員情報リスト｜ScottAdmin</title>
+    <link rel="stylesheet" type="text/css" href="/public/css/main.css">
+</head>
+<body>
+<h1>従業員情報リスト</h1>
+<nav>
+    <ul>
+        <li><a href="/">TOP</a></li>
+        <li>従業員情報リスト</li>
+    </ul>
+</nav>
+<section>
+    <p>
+        新規登録は<a href="/App/GoEmpAdd">こちら</a>から
+    </p>
+</section>
+
+{{.flash.success}}
+
+<section>
+    <table>
+        <thead>
+        <tr>
+            <th>従業員番号</th>
+            <th>従業員名</th>
+            <th>役職</th>
+            <th>上司番号</th>
+            <th>雇用日</th>
+            <th>給与</th>
+            <th>歩合</th>
+            <th>部門番号</th>
+            <th colspan="2">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{ range .empList}}
+        <tr>
+            <td>{{.Empno}}</td>
+            <td>{{.Ename}}</td>
+            <td>{{.Job}}</td>
+            <td>{{.Mgr}}</td>
+            <td>{{.Hiredate}}</td>
+            <td>{{.Sal}}</td>
+            <td>{{.Comm}}</td>
+            <td>{{.Deptno}}</td>
+            <td>
+                <form action="/App/GoEmpEdit">
+                    <input type="hidden" name="editEmpEmpno" id="editEmpEmpno" value="{{.Empno}}">
+                    <input type="submit" value="編集">
+                </form>
+            </td>
+            <td>
+                <form action="/App/ConfirmEmpDelete" method="post">
+                    <input type="hidden" name="deleteEmpEmpno" id="deleteEmpEmpno" value="{{.Empno}}">
+                    <input type="submit" value="削除">
+                </form>
+            </td>
+        </tr>
+        {{ end }}
+        </tbody>
+    </table>
+</section>
+
+</body>
+</html>
