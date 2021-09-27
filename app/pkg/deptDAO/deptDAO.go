@@ -1,7 +1,7 @@
-package dao
+package deptDAO
 
 import (
-	"revelTest/app/pkg/entities"
+	"revelTest/app/pkg/dept"
 
 	"database/sql"
 	"fmt"
@@ -9,13 +9,13 @@ import (
 	"log"
 )
 
-func FindByPk(db *sql.DB, deptno string) *entities.Dept {
+func FindByPk(db *sql.DB, deptno string) *dept.Dept {
 	stmt, err := db.Prepare("SELECT * FROM dept WHERE deptno = ?")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	var d entities.Dept
+	var d dept.Dept
 	err = stmt.QueryRow(deptno).Scan(&d.Deptno, &d.Dname, &d.Loc)
 	if err != nil {
 		log.Fatal(err)
@@ -38,15 +38,15 @@ func FindByPkCount(db *sql.DB, deptno string) int{
 }
 
 
-func FindAll(db *sql.DB) *entities.DeptList {
+func FindAll(db *sql.DB) *dept.DeptList {
 	rows, err := db.Query("SELECT * FROM dept")
 	if err != nil {
 		log.Fatal(err);
 	}
 
 	defer rows.Close()
-	var d entities.Dept
-	var deptList entities.DeptList
+	var d dept.Dept
+	var deptList dept.DeptList
 	for rows.Next() {
 		err := rows.Scan(&d.Deptno, &d.Dname, &d.Loc)
 		if err != nil {
