@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <title>従業員情報削除｜ScottAdmin</title>
+    <link rel="stylesheet" type="text/css" href="/public/css/main.css">
+    <meta charset="utf-8">
+</head>
+<body>
+<h1>従業員情報削除</h1>
+<nav>
+    <ul>
+        <li><a href=" /">TOP</a></li>
+        <li><a href=" /App/EmpList">従業員リスト</a></li>
+        <li>従業員情報削除</li>
+    </ul>
+</nav>
+<section>
+    <p>以下の部門情報を削除します。よろしければ、削除ボタンを押してください。</p>
+
+    <form action=" /App/EmpDelete " method="post">
+        <table>
+            <tbody>
+            <tr>
+                <th>部門番号</th>
+                <td>{{ .empno }}<input type="hidden" name="deleteEmpEmpno" id="deleteEmpEmpno" value="{{ .empno }}"></td>
+            </tr>
+            <tr>
+                <th>部門名</th>
+                <td>{{ .ename }}</td>
+            </tr>
+            <tr>
+                <th>役職</th>
+                <td>{{ .job }}</td>
+            </tr>
+            <tr>
+                <th>上司番号</th>
+                <td>{{ .mgr }}</td>
+            </tr>
+            <tr>
+                <th>雇用日</th>
+                <td>{{ .hiredate }}</td>
+            </tr>
+
+            <tr>
+                <th>給与</th>
+                <td>{{ .sal }}</td>
+            </tr>
+
+            <tr>
+                <th>歩合</th>
+                <td>{{ .comm }}</td>
+            </tr>
+            <tr>
+                <th>部門番号</th>
+                <td>{{ .deptno }}</td>
+            </tr>
+            
+            <tr>
+                <td colspan="2" class="submit"><input type="submit" value="削除"></td>
+            </tr>
+            
+            </tbody>
+        </table>
+    </form>
+</section>
+</body>
+</html>
