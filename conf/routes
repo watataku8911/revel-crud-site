@@ -21,7 +21,18 @@ POST    /App/DeptEdit                           App.DeptEdit
 
 # -----------------------------------------------------------------------------
 
-GET     /App/EmpList                           App.EmpList
+GET     /App/EmpList                          App.EmpList
+
+POST    /App/ConfirmEmpDelete                 App.ConfirmEmpDelete
+POST    /App/EmpDelete                        App.EmpDelete
+
+GET     /App/GoEmpAdd                         App.GoEmpAdd
+POST    /App/EmpAdd                           App.EmpAdd
+
+GET     /App/GoEmpEdit                        App.GoEmpEdit
+# POST    /App/EmpEdit                          App.EmpEdit
+
+# ----------------------------------------------------------------------
 
 
 # エラーページ

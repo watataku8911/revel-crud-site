@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <title>従業員情報編集｜ScottAdmin</title>
+    <link rel="stylesheet" type="text/css" href=" /public/css/main.css">
+    <meta charset="utf-8">
+</head>
+<body>
+<h1>従業員情報編集</h1>
+<nav>
+    <ul>
+        <li><a href=" /">TOP</a></li>
+        <li><a href=" /App/EmpList">従業員リスト</a></li>
+        <li>従業員情報編集</li>
+    </ul>
+</nav>
+
+
+
+<section>
+    <p>情報を入力し、登録ボタンをクリックしてください</p>
+
+    <form action=" /App/EmpEdit" method="post">
+        <table>
+            <tbody>
+            <tr>
+                <th>従業員番号</th>
+                <td>{{ .empno }}<input type="hidden" id="addEmpEmpno" name="addEmpEmpno" value="{{ .empno }}"></td>
+            </tr>
+            <tr>
+                <th>従業員名&nbsp;<span class="required">必須</span></th>
+                <td><input type="text" id="addEmpEname" name="addEmpEname" value="{{ .ename }}"></td>
+            </tr>
+
+            <tr>
+                <th>役職&nbsp;<span class="required">必須</span></th>
+                <td><input type="text" id="addEmpJob" name="addEmpJob" value="{{ .job }}"></td>
+            </tr>
+
+            <tr>
+                <th>上司番号&nbsp;<span class="required">必須</span></th>
+                <td>
+                    <select name="addEmpMgr" id="addEmpMgr">
+                        <option value="0">0:上司なし</option>
+                    {{ $Mgr := .Mgr }}
+                    {{ $mgr := .mgr }}
+                    {{ range .empList }}
+                    {{ if $mgr }}
+                        <option value="{{ .Empno }}" selected>{{ .Empno }}:{{ .Ename }}</option>
+                        {{ else }}
+                            <option value="{{ .Empno }}">{{ .Empno }}:{{ .Ename }}</option>
+                        {{ end }}
+                    {{ end }}
+                    </select>
+                    {{ $mgr }}
+                </td>
+            </tr>
+            <tr>
+                <th>雇用日&nbsp;<span class="required">必須</span></th>
+                <td>
+                    <select name="addEmpHiredateYear" id="addEmpHiredateYear">
+                    <option value="0">選択してください</option>
+                </select>
+                年
+                <select name="addEmpHiredateMonth" id="addEmpHiredateMonth">
+                    <option value="0">選択してください</option>
+                    
+                </select>
+                月
+                <select name="addEmpHiredateDay" id="addEmpHiredateDay">
+                    <option value="0">選択してください</option>
+
+                </select>
+                日
+                </td>
+            </tr>
+
+            <tr>
+                <th>給与&nbsp;<span class="required">必須</span></th>
+                <td><input type="text" id="addEmpSal" name="addEmpSal" value="{{ .sal }}"></td>
+            </tr>
+
+            <tr>
+                <th>歩合&nbsp;<span class="required">必須</span></th>
+                <td><input type="text" id="addEmpComm" name="addEmpComm" value="{{ .comm }}"></td>
+            </tr>
+            <tr>
+                <th>部門番号&nbsp;<span class="required">必須</span></th>
+                <td>
+                    <select name="addEmpDeptno" id="addEmpDeptno">
+                        <option value="">選択してください</option>
+                        {{ $deptno := .deptno }}
+                        {{ range .deptList }}
+                            {{ if eq $deptno .Deptno}}
+                            <option value="{{ .Deptno }}" selected>{{ .Deptno }}:{{ .Dname }}</option>
+                            {{ else }}
+                            <option value="{{ .Deptno }}">{{ .Deptno }}:{{ .Dname }}</option>
+                            {{ end }}
+                        {{ end }}
+                    </select>
+
+                    {{ .Deptno }}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="submit"><input type="submit" value="登録"></td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</section>
+</body>
+</html>
