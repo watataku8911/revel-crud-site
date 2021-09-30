@@ -8,6 +8,7 @@ import (
 	"regexp"
 	"revelTest/app/pkg/deptDAO"
 	"revelTest/app/pkg/empDAO"
+	"strings"
 )
 
 type App struct {
@@ -87,7 +88,7 @@ func (c App) DeptAdd(addDeptDeptno string, addDeptDname string, addDeptLoc strin
 // --------------------------------- dept edit ---------------------------------------------------------
 // --------------------------------------------------------------------------------------------------------------
 
-func (c App) GoDeptEdit(editDeptDeptno string) revel.Result {
+func (c App) GoDeptEdit(editDeptDeptno int) revel.Result {
 	db, err := sql.Open("mysql", "scott:tiger@tcp(127.0.0.1:8889)/wp32scott")//通常：ポート番号３３０６、＊manp:8889
 	if err != nil {
 		log.Fatal(err)
@@ -141,7 +142,7 @@ func (c App) DeptEdit(editDeptDeptno string, editDeptDname string, editDeptLoc s
 // -------------------- dept delete ------------------------------------------------------------------
 // ---------------------------------------------------------------------------------
 
-func (c App) ConfirmDeptDelete(deleteDeptDeptno string) revel.Result {
+func (c App) ConfirmDeptDelete(deleteDeptDeptno int) revel.Result {
 	db, err := sql.Open("mysql", "scott:tiger@tcp(127.0.0.1:8889)/wp32scott")//通常：ポート番号３３０６、＊manp:8889
 	if err != nil {
 		log.Fatal(err)
@@ -203,7 +204,10 @@ func (c App) EmpList() revel.Result {
 	if empList == nil {
 		fmt.Println("から")
 	}
-	return c.Render(empList)
+
+
+
+	return c.Render(empList, db)
 
 }
 
@@ -298,8 +302,7 @@ func (c App) EmpAdd(addEmpEmpno string, addEmpEname string, addEmpJob string, ad
 // -------------------------------------------------- emp edit ------------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
-func (c App) GoEmpEdit(editEmpEmpno string) revel.Result {
-	fmt.Println(editEmpEmpno)
+func (c App) GoEmpEdit(editEmpEmpno int) revel.Result {
 	db, err := sql.Open("mysql", "scott:tiger@tcp(127.0.0.1:8889)/wp32scott")//通常：ポート番号３３０６、＊manp:8889
 	if err != nil {
 		log.Fatal(err)
@@ -316,11 +319,11 @@ func (c App) GoEmpEdit(editEmpEmpno string) revel.Result {
 		fmt.Println("から")
 	}
 	empList := empDAO.FindAll(db)
-	if deptList == nil {
+	if empList == nil {
 		fmt.Println("から")
 	}
 	emp := empDAO.FindByPk(db, editEmpEmpno)
-	if empList == nil {
+	if emp == nil {
 		fmt.Println("空")
 	}
 	empno := emp.Empno
@@ -331,6 +334,8 @@ func (c App) GoEmpEdit(editEmpEmpno string) revel.Result {
 	sal := emp.Sal
 	comm := emp.Comm
 	deptno := emp.Deptno
+
+	fmt.Println(emp)
 	
 	return c.Render(deptList, empList, empno, ename, job, mgr, hiredate, sal, comm, deptno)
 }
@@ -339,7 +344,7 @@ func (c App) GoEmpEdit(editEmpEmpno string) revel.Result {
 // -------------------------------------------------- emp delete ------------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
 
-func (c App) ConfirmEmpDelete(deleteEmpEmpno string) revel.Result {
+func (c App) ConfirmEmpDelete(deleteEmpEmpno int) revel.Result {
 	db, err := sql.Open("mysql", "scott:tiger@tcp(127.0.0.1:8889)/wp32scott")//通常：ポート番号３３０６、＊manp:8889
 	if err != nil {
 		log.Fatal(err)
@@ -386,3 +391,71 @@ func (c App) EmpDelete(deleteEmpEmpno string) revel.Result {
 	return c.Redirect(App.EmpList)
 }
 
+// -------------------------------------------------------------　カスタム関数　--------------------------------------------------------------------------
+
+func CurrencyFindByPK(db *sql.DB, deptno int) string {
+	db, err := sql.Open("mysql", "scott:tiger@tcp(127.0.0.1:8889)/wp32scott")//通常：ポート番号３３０６、＊manp:8889
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = db.Ping()
+	if err != nil {
+		fmt.Println("データベース接続失敗")
+	}
+
+	defer db.Close()
+	dept := deptDAO.FindByPk(db, deptno)
+	if dept == nil {
+		fmt.Println("空")
+	}
+	dname := dept.Dname
+	return dname
+}
+
+func CurrencyDateFormat(date string) string {
+	dates := strings.Split(date, "-")
+	year := dates[0]
+	month := dates[1]
+	day := dates[2]
+
+	return year + "年" + month + "月" + day + "日"
+}
+
+func CurrencyFindByMgr(db *sql.DB, mgr int) string {
+	
+	db, err := sql.Open("mysql", "scott:tiger@tcp(127.0.0.1:8889)/wp32scott")//通常：ポート番号３３０６、＊manp:8889
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = db.Ping()
+	if err != nil {
+		fmt.Println("データベース接続失敗")
+	}
+
+	defer db.Close()
+	emp := empDAO.FindByMgr(db, mgr)
+	if emp == nil {
+		fmt.Println("空")
+	}
+	ename := emp.Ename
+	return ename
+}
+
+func isNil(mgr *int) string {
+	var nothing string
+	if mgr == nil {
+		nothing = "上司なし"
+	}
+	return nothing
+}
+
+
+
+  func init() {
+
+	revel.TemplateFuncs["CurrencyFindByPK"] = CurrencyFindByPK
+	revel.TemplateFuncs["CurrencyDateFormat"] = CurrencyDateFormat
+	revel.TemplateFuncs["CurrencyFindByMgr"] = CurrencyFindByMgr
+	revel.TemplateFuncs["isNil"] = isNil
+
+  }

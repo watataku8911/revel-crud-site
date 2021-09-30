@@ -42,17 +42,20 @@
                 <td>
                     <select name="addEmpMgr" id="addEmpMgr">
                         <option value="0">0:上司なし</option>
+                        {{ $field := field "addEmpMgr" . }}
                     {{ $Mgr := .Mgr }}
                     {{ $mgr := .mgr }}
                     {{ range .empList }}
-                    {{ if $mgr }}
-                        <option value="{{ .Empno }}" selected>{{ .Empno }}:{{ .Ename }}</option>
+                        {{ if $mgr }}
+                            <option value="{{ .Empno }}" selected>{{ .Empno }}:{{ .Ename }}</option>
                         {{ else }}
                             <option value="{{ .Empno }}">{{ .Empno }}:{{ .Ename }}</option>
                         {{ end }}
                     {{ end }}
                     </select>
-                    {{ $mgr }}
+                    {{ .Mgr }}
+
+                    {{ $field.Flash }}
                 </td>
             </tr>
             <tr>
@@ -60,6 +63,9 @@
                 <td>
                     <select name="addEmpHiredateYear" id="addEmpHiredateYear">
                     <option value="0">選択してください</option>
+                    {{ range .year }}
+                    <option value="{{ .year }}">{{ .year }}</option>
+                    {{ end}}
                 </select>
                 年
                 <select name="addEmpHiredateMonth" id="addEmpHiredateMonth">

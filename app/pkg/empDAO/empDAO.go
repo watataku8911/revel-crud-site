@@ -7,9 +7,10 @@ import (
 	"fmt"
 	_"github.com/go-sql-driver/mysql"
 	"log"
+
 )
 
-func FindByPk(db *sql.DB, empno string) *emp.Emp {
+func FindByPk(db *sql.DB, empno int) *emp.Emp {
 	stmt, err := db.Prepare("SELECT * FROM emp WHERE empno = ?")
 	if err != nil {
 		log.Fatal(err)
@@ -24,7 +25,7 @@ func FindByPk(db *sql.DB, empno string) *emp.Emp {
 	return &e
 }
 
-func FindByPkCount(db *sql.DB, empno string) int{
+func FindByPkCount(db *sql.DB, empno int) int{
 	var count int
 	stmt, err := db.Prepare("SELECT COUNT(*) FROM emp WHERE empno = ?")
 	if err != nil {
@@ -35,6 +36,21 @@ func FindByPkCount(db *sql.DB, empno string) int{
 		log.Fatal(err)
 	}
 	return count
+}
+
+func FindByMgr(db *sql.DB, mgr int) *emp.Emp {
+	stmt, err := db.Prepare("SELECT * FROM emp WHERE mgr = ?")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var e emp.Emp
+	err = stmt.QueryRow(mgr).Scan(&e.Empno, &e.Ename, &e.Job, &e.Mgr, &e.Hiredate, &e.Sal, &e.Comm, &e.Deptno)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return &e
 }
 
 
@@ -48,9 +64,16 @@ func FindAll(db *sql.DB) *emp.EmpList {
 	var e emp.Emp
 	var empList emp.EmpList
 	for rows.Next() {
-		err := rows.Scan(&e.Empno, &e.Ename, &e.Job, &e.Mgr, &e.Hiredate, &e.Sal, &e.Comm, &e.Deptno)
-		if err != nil {
-			log.Fatal(err)
+		if &e.Mgr != nil {
+			err := rows.Scan(&e.Empno, &e.Ename, &e.Job, &e.Mgr, &e.Hiredate, &e.Sal, &e.Comm, &e.Deptno)
+			if err != nil {
+				log.Fatal(err)
+			}
+		} else {
+			err := rows.Scan(&e.Empno, &e.Ename, &e.Job, &e.Mgr, &e.Hiredate, &e.Sal, &e.Comm, &e.Deptno)
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
 		empList = append(empList, e)
 	}
