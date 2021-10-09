@@ -38,14 +38,14 @@ func FindByPkCount(db *sql.DB, empno int) int{
 	return count
 }
 
-func FindByMgr(db *sql.DB, mgr int) *emp.Emp {
-	stmt, err := db.Prepare("SELECT * FROM emp WHERE mgr = ?")
+func FindByMgr(db *sql.DB, mgr *int) *emp.Emp {
+	stmt, err := db.Prepare("SELECT ename FROM emp WHERE empno = ?")
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	var e emp.Emp
-	err = stmt.QueryRow(mgr).Scan(&e.Empno, &e.Ename, &e.Job, &e.Mgr, &e.Hiredate, &e.Sal, &e.Comm, &e.Deptno)
+	err = stmt.QueryRow(&mgr).Scan(&e.Ename)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -28,7 +28,7 @@
             <th>従業員番号</th>
             <th>従業員名</th>
             <th>役職</th>
-            <th>上司番号</th>
+            <th>上司</th>
             <th>雇用日</th>
             <th>給与</th>
             <th>歩合</th>
@@ -45,12 +45,12 @@
             <td style="text-align: right;">{{.Empno}}</td>
             <td>{{.Ename}}</td>
             <td>{{.Job}}</td>
-            <td>{{ isNil .Mgr}}</td>
+            <td>{{ CurrencyFindByMgr $db .Mgr }}</td>
 
             <td>{{ CurrencyDateFormat .Hiredate}}</td>
             <td style="text-align: right;">{{.Sal}}</td>
-            <td style="text-align: right;">{{.Comm}}</td>
-            <td>{{.Deptno}} {{ CurrencyFindByPK $db .Deptno }}</td>
+            <td style="text-align: right;">{{ isNil .Comm}}</td>
+            <td>{{ CurrencyFindByPK $db .Deptno }}</td>
             <td>
                 <form action="/App/GoEmpEdit">
                     <input type="hidden" name="editEmpEmpno" id="editEmpEmpno" value="{{.Empno}}">

@@ -41,21 +41,23 @@
                 <th>上司番号&nbsp;<span class="required">必須</span></th>
                 <td>
                     <select name="addEmpMgr" id="addEmpMgr">
-                        <option value="0">0:上司なし</option>
-                        {{ $field := field "addEmpMgr" . }}
-                    {{ $Mgr := .Mgr }}
+                    {{ $db := .db }}
                     {{ $mgr := .mgr }}
+                    {{ if isNilMgr $mgr}}
+                        <option value="" selected>上司なし</option>
+                    {{ else }}
+                        <option value="">上司なし</option>
+                    {{ end }}
+
                     {{ range .empList }}
-                        {{ if $mgr }}
-                            <option value="{{ .Empno }}" selected>{{ .Empno }}:{{ .Ename }}</option>
+                        {{ if eqMgr $mgr .Mgr}}
+                            <option value="{{ .Mgr }}" selected>{{  CurrencyFindByMgr $db .Mgr }}</option>
                         {{ else }}
-                            <option value="{{ .Empno }}">{{ .Empno }}:{{ .Ename }}</option>
+                            <option value="{{ .Mgr }}">{{  CurrencyFindByMgr $db .Mgr }}</option>
                         {{ end }}
                     {{ end }}
                     </select>
-                    {{ .Mgr }}
 
-                    {{ $field.Flash }}
                 </td>
             </tr>
             <tr>
@@ -98,14 +100,12 @@
                         {{ $deptno := .deptno }}
                         {{ range .deptList }}
                             {{ if eq $deptno .Deptno}}
-                            <option value="{{ .Deptno }}" selected>{{ .Deptno }}:{{ .Dname }}</option>
+                            <option value="{{ .Deptno }}" selected>{{ .Dname }}</option>
                             {{ else }}
-                            <option value="{{ .Deptno }}">{{ .Deptno }}:{{ .Dname }}</option>
+                            <option value="{{ .Deptno }}">{{ .Dname }}</option>
                             {{ end }}
                         {{ end }}
                     </select>
-
-                    {{ .Deptno }}
                 </td>
             </tr>
             <tr>

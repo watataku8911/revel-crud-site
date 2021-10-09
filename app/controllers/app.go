@@ -9,6 +9,7 @@ import (
 	"revelTest/app/pkg/deptDAO"
 	"revelTest/app/pkg/empDAO"
 	"strings"
+	//"strconv"
 )
 
 type App struct {
@@ -337,7 +338,7 @@ func (c App) GoEmpEdit(editEmpEmpno int) revel.Result {
 
 	fmt.Println(emp)
 	
-	return c.Render(deptList, empList, empno, ename, job, mgr, hiredate, sal, comm, deptno)
+	return c.Render(deptList, empList, empno, ename, job, mgr, hiredate, sal, comm, deptno, db)
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------
@@ -421,41 +422,69 @@ func CurrencyDateFormat(date string) string {
 	return year + "年" + month + "月" + day + "日"
 }
 
-func CurrencyFindByMgr(db *sql.DB, mgr int) string {
+func CurrencyFindByMgr(db *sql.DB, mgr *int) string {
 	
-	db, err := sql.Open("mysql", "scott:tiger@tcp(127.0.0.1:8889)/wp32scott")//通常：ポート番号３３０６、＊manp:8889
-	if err != nil {
-		log.Fatal(err)
-	}
-	err = db.Ping()
-	if err != nil {
-		fmt.Println("データベース接続失敗")
-	}
+	var ename string
+	if mgr != nil{
+		db, err := sql.Open("mysql", "scott:tiger@tcp(127.0.0.1:8889)/wp32scott")//通常：ポート番号３３０６、＊manp:8889
+		if err != nil {
+			log.Fatal(err)
+		}
+		err = db.Ping()
+		if err != nil {
+			fmt.Println("データベース接続失敗")
+		}
 
-	defer db.Close()
-	emp := empDAO.FindByMgr(db, mgr)
-	if emp == nil {
-		fmt.Println("空")
+		defer db.Close()
+		emp := empDAO.FindByMgr(db, mgr)
+		if emp == nil {
+			fmt.Println("空")
+		}
+
+		ename = emp.Ename
+
+
+	} else {
+		ename = "上司なし"
 	}
-	ename := emp.Ename
 	return ename
 }
 
-func isNil(mgr *int) string {
-	var nothing string
-	if mgr == nil {
-		nothing = "上司なし"
+func isNil(comm *string) *string{
+	Comm := ""
+	if comm == nil {
+		comm = &Comm
 	}
-	return nothing
+	return comm
+}
+
+func eqMgr(mgr *int, Mgr *int) bool{
+	var flg bool
+	if Mgr != nil {
+		if *mgr == *Mgr {
+			flg = true
+		} else {
+			flg = false
+		}
+	}
+	return flg
+}
+
+func isNilMgr(mgr *int) *int {
+	Mgr := 0
+	if mgr == nil {
+		mgr = &Mgr
+	}
+	return mgr
 }
 
 
 
-  func init() {
-
+func init() {
 	revel.TemplateFuncs["CurrencyFindByPK"] = CurrencyFindByPK
 	revel.TemplateFuncs["CurrencyDateFormat"] = CurrencyDateFormat
 	revel.TemplateFuncs["CurrencyFindByMgr"] = CurrencyFindByMgr
 	revel.TemplateFuncs["isNil"] = isNil
-
-  }
+	revel.TemplateFuncs["isNilMgr"] = isNilMgr
+	revel.TemplateFuncs["eqMgr"] = eqMgr
+}
