@@ -9,7 +9,7 @@ import (
 	"log"
 )
 
-func FindByPk(db *sql.DB, deptno string) *dept.Dept {
+func FindByPk(db *sql.DB, deptno int) *dept.Dept {
 	stmt, err := db.Prepare("SELECT * FROM dept WHERE deptno = ?")
 	if err != nil {
 		log.Fatal(err)

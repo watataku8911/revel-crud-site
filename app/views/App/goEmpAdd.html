@@ -46,15 +46,34 @@
 
             <tr>
                 <th>上司番号&nbsp;<span class="required">必須</span></th>
-                {{ with $field := field "addEmpMgr" . }}
-                <td><input type="text" id="addEmpMgr" name="addEmpMgr" value="{{ $field.Flash }}"></td>
-                {{ end }}
+                <td>
+                    <select name="addEmpMgr" id="addEmpMgr">
+                        <option value="">選択してください</option>
+                        <option value="0">0:上司なし</option>
+                    {{ range .empList }}
+                        <option value="{{ .Empno }}">{{ .Empno }}:{{  .Ename }}</option>
+                    {{ end }}
+					</select>
+                </td>
             </tr>
             <tr>
                 <th>雇用日&nbsp;<span class="required">必須</span></th>
-                {{ with $field := field "addEmpHiredate" . }}
-                <td><input type="text" id="addEmpHiredate" name="addEmpHiredate" value="{{ $field.Flash }}" placeholder="入力例）OOOO-OO-OO"></td>
-                {{ end }}
+                <td>
+                    <select name="addEmpHiredateYear" id="addEmpHiredateYear">
+                    <option value="">選択してください</option>
+
+                </select>
+                年
+                <select name="addEmpHiredateMonth" id="addEmpHiredateMonth">
+                    <option value="">選択してください</option>
+                </select>
+                月
+                <select name="addEmpHiredateDay" id="addEmpHiredateDay">
+                    <option value="">選択してください</option>
+
+                </select>
+                日
+                </td>
             </tr>
 
             <tr>
@@ -72,9 +91,14 @@
             </tr>
             <tr>
                 <th>部門番号&nbsp;<span class="required">必須</span></th>
-                {{ with $field := field "addDeptDeptno" . }}
-                <td><input type="text" name="addDeptDeptno" id="addDeptDeptno" placeholder="数値二桁以上" value="{{ $field.Flash }}"></td>
-                {{ end }}
+                <td>
+                    <select name="addEmpDeptno" id="addEmpDeptno">
+                        <option value="">選択してください</option>
+                        {{ range .deptList }}
+                        <option value="{{ .Deptno }}">{{ .Deptno }}:{{ .Dname }}</option>
+                        {{ end }}
+                    </select>
+                </td>
             </tr>
             <tr>
                 <td colspan="2" class="submit"><input type="submit" value="登録"></td>
