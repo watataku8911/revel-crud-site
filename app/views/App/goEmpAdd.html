@@ -61,21 +61,29 @@
                 <td>
                     <select name="addEmpHiredateYear" id="addEmpHiredateYear">
                     <option value="">選択してください</option>
+                    {{ range .year}}
+                        <option value="{{ . }}">{{ . }}</option>
+                    {{ end }}
 
                 </select>
                 年
                 <select name="addEmpHiredateMonth" id="addEmpHiredateMonth">
                     <option value="">選択してください</option>
+                    {{ range .month}}
+                        <option value="{{ . }}">{{ . }}</option>
+                    {{ end }}
+
                 </select>
                 月
                 <select name="addEmpHiredateDay" id="addEmpHiredateDay">
                     <option value="">選択してください</option>
-
+                    {{ range .day}}
+                        <option value="{{ . }}">{{ . }}</option>
+                    {{ end }}
                 </select>
                 日
                 </td>
             </tr>
-
             <tr>
                 <th>給与&nbsp;<span class="required">必須</span></th>
                 {{ with $field := field "addEmpSal" . }}
