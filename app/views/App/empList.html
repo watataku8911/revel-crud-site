@@ -39,18 +39,16 @@
         <tbody>
             {{ $db := .db}}
         {{ range .empList}}
-       
-
         <tr>
             <td style="text-align: right;">{{.Empno}}</td>
             <td>{{.Ename}}</td>
             <td>{{.Job}}</td>
-            <td>{{ CurrencyFindByMgr $db .Mgr }}</td>
+            <td>{{ isNilMgr .Mgr}}:{{ CurrencyFindByMgr $db .Mgr }}</td>
 
             <td>{{ CurrencyDateFormat .Hiredate}}</td>
             <td style="text-align: right;">{{.Sal}}</td>
             <td style="text-align: right;">{{ isNil .Comm}}</td>
-            <td>{{ CurrencyFindByPK $db .Deptno }}</td>
+            <td>{{ .Deptno }}:{{ CurrencyFindByPK $db .Deptno }}</td>
             <td>
                 <form action="/App/GoEmpEdit">
                     <input type="hidden" name="editEmpEmpno" id="editEmpEmpno" value="{{.Empno}}">

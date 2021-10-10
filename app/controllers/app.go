@@ -423,7 +423,6 @@ func CurrencyDateFormat(date string) string {
 }
 
 func CurrencyFindByMgr(db *sql.DB, mgr *int) string {
-	
 	var ename string
 	if mgr != nil{
 		db, err := sql.Open("mysql", "scott:tiger@tcp(127.0.0.1:8889)/wp32scott")//通常：ポート番号３３０６、＊manp:8889
@@ -458,10 +457,10 @@ func isNil(comm *string) *string{
 	return comm
 }
 
-func eqMgr(mgr *int, Mgr *int) bool{
+func eqMgr(mgr *int, Empno int) bool{
 	var flg bool
-	if Mgr != nil {
-		if *mgr == *Mgr {
+	if mgr != nil {
+		if *mgr == Empno {
 			flg = true
 		} else {
 			flg = false

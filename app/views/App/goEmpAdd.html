@@ -48,9 +48,10 @@
                 <th>上司番号&nbsp;<span class="required">必須</span></th>
                 <td>
                     <select name="addEmpMgr" id="addEmpMgr">
-						<option value="0">0:上司なし</option>
+                        <option value="">選択してください</option>
+                        <option value="0">0:上司なし</option>
                     {{ range .empList }}
-                        <option value="{{ .Empno }}">{{ .Empno }}:{{ .Ename }}</option>
+                        <option value="{{ .Empno }}">{{ .Empno }}:{{  .Ename }}</option>
                     {{ end }}
 					</select>
                 </td>
@@ -59,16 +60,16 @@
                 <th>雇用日&nbsp;<span class="required">必須</span></th>
                 <td>
                     <select name="addEmpHiredateYear" id="addEmpHiredateYear">
-                    <option value="0">選択してください</option>
+                    <option value="">選択してください</option>
 
                 </select>
                 年
                 <select name="addEmpHiredateMonth" id="addEmpHiredateMonth">
-                    <option value="0">選択してください</option>
+                    <option value="">選択してください</option>
                 </select>
                 月
                 <select name="addEmpHiredateDay" id="addEmpHiredateDay">
-                    <option value="0">選択してください</option>
+                    <option value="">選択してください</option>
 
                 </select>
                 日
