@@ -19,7 +19,8 @@
 
 <section>
     <p>情報を入力し、登録ボタンをクリックしてください</p>
-
+    {{template "flash.html" .}}
+    
     <form action=" /App/EmpEdit" method="post">
         <table>
             <tbody>
@@ -64,11 +65,8 @@
                 <td>
                     <select name="addEmpHiredateYear" id="addEmpHiredateYear">
                     <option value="">選択してください</option>
-                    {{ $year := .year}}
-                    {{ $hiredateYear := .hiredateYear}}
-
-                    {{ $hiredateYear}}
-                    {{ range $year }}
+                    {{ $hiredateYear := .hiredateYear }}
+                    {{ range .year }}
                         {{ if eqal . $hiredateYear}}
                         <option value="{{ . }}" selected>{{ . }}</option>
                         {{ else }}
@@ -79,9 +77,8 @@
                 年
                 <select name="addEmpHiredateMonth" id="addEmpHiredateMonth">
                     <option value="">選択してください</option>
-                    {{ $month := .month}}
                     {{ $hiredateMonth := .hiredateMonth}}
-                    {{ range $month}}
+                    {{ range .month}}
                         {{ if eqal . $hiredateMonth}}
                         <option value="{{ . }}" selected>{{ . }}</option>
                         {{ else }}
@@ -92,9 +89,8 @@
                 月
                 <select name="addEmpHiredateDay" id="addEmpHiredateDay">
                     <option value="">選択してください</option>
-                    {{ $day := .day}}
                     {{ $hiredateDay := .hiredateDay}}
-                    {{ range $day}}
+                    {{ range .day}}
                         {{ if eqal . $hiredateDay}}
                         <option value="{{ . }}" selected>{{ . }}</option>
                         {{ else }}
@@ -133,7 +129,7 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="2" class="submit"><input type="submit" value="登録"></td>
+                <td colspan="2" class="submit"><input type="submit" value="編集"></td>
             </tr>
             </tbody>
         </table>

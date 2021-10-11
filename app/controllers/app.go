@@ -253,6 +253,8 @@ func (c App) GoEmpAdd() revel.Result {
 		fmt.Println("から")
 	}
 
+	
+
 	return c.Render(deptList, empList, year, month, day)
 }
 
@@ -269,7 +271,7 @@ func (c App) EmpAdd(addEmpEmpno string, addEmpEname string, addEmpJob string, ad
 	defer db.Close()
 	c.Validation.Required(addEmpEmpno).Message("従業員番号は必須です。")
 	c.Validation.Match(addEmpEmpno, regexp.MustCompile("[0-9]")).Message("従業員番号は数値で入力して下さい。")
-	c.Validation.Match(addEmpEmpno, regexp.MustCompile("^[0-9]{4.}")).Message("従業員番号は数字4桁で入力して下さい。")
+	c.Validation.Match(addEmpEmpno, regexp.MustCompile("[0-9]{4.}")).Message("従業員番号は数字4桁で入力して下さい。")
 
 	c.Validation.Required(addEmpEname).Message("従業員名は必須です。")
 
@@ -361,16 +363,15 @@ func (c App) GoEmpEdit(editEmpEmpno int) revel.Result {
 	hiredateMonth := hiredates[1]
 	hiredateDay := hiredates[2]
 
-	var intHiredateYear int
-	var intHiredateMonth int
-	var intHiredateDay int
-	
-	intHiredateYear, _ = strconv.Atoi(hiredateYear)
-	intHiredateMonth, _ = strconv.Atoi(hiredateMonth)
-	intHiredateDay, _ = strconv.Atoi(hiredateDay)
+	if strings.HasPrefix(hiredateMonth, "0") {
+		hiredateMonth = hiredateMonth[1:]
+	}
 
-	//fmt.Printf("%T\n", intHiredateYear)
-	return c.Render(deptList, empList, empno, ename, job, mgr, intHiredateYear, intHiredateMonth, intHiredateDay, sal, comm, deptno, db, year, month, day)
+	if strings.HasPrefix(hiredateDay, "0") {
+		hiredateDay = hiredateDay[1:]
+	}
+
+	return c.Render(deptList, empList, empno, ename, job, mgr, hiredateYear, hiredateMonth, hiredateDay, sal, comm, deptno, db, year, month, day)
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------
@@ -503,9 +504,9 @@ func eqMgr(mgr *int, Empno int) bool{
 
 func eqal(num1 int, num2 string) bool{
 	var flg bool
-	var intNum2 int
-	intNum2 = strconv.Atoi(num2)
-	if num1 == intNum2 {
+	var strNum string
+	strNum = strconv.Itoa(num1)
+	if strNum == num2 {
 		flg = true
 	} else {
 		flg = false
