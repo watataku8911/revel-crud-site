@@ -502,6 +502,19 @@ func eqMgr(mgr *int, Empno int) bool{
 	return flg
 }
 
+func validEqMgr(mgr string, Empno int) bool{
+	var flg bool
+	var strEmpno string
+	strEmpno = strconv.Itoa(Empno)
+	if strEmpno == mgr {
+		flg = true
+	} else {
+		flg = false
+	}
+
+	return flg
+}
+
 func eqal(num1 int, num2 string) bool{
 	var flg bool
 	var strNum string
@@ -532,4 +545,5 @@ func init() {
 	revel.TemplateFuncs["isNilMgr"] = isNilMgr
 	revel.TemplateFuncs["eqMgr"] = eqMgr
 	revel.TemplateFuncs["eqal"] = eqal
+	revel.TemplateFuncs["validEqMgr"] = validEqMgr
 }
