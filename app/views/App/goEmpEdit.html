@@ -19,7 +19,8 @@
 
 <section>
     <p>情報を入力し、登録ボタンをクリックしてください</p>
-
+    {{template "flash.html" .}}
+    
     <form action=" /App/EmpEdit" method="post">
         <table>
             <tbody>
@@ -44,7 +45,11 @@
                     {{ $db := .db }}
                     {{ $mgr := isNilMgr .mgr }}
                     <option value="">選択してください</option>
-                    <option value="0">0:上司なし</option>
+                    {{ if eqMgr $mgr 0}}
+                        <option value="0" selected>0:上司なし</option>
+                    {{else}}
+                        <option value="0">0:上司なし</option>
+                    {{end}}
                     {{ range .empList }}
                         {{ if eqMgr $mgr .Empno}}
                             <option value="{{ .Empno }}" selected>{{ .Empno }}:{{  .Ename}}</option>
@@ -60,18 +65,38 @@
                 <td>
                     <select name="addEmpHiredateYear" id="addEmpHiredateYear">
                     <option value="">選択してください</option>
+                    {{ $hiredateYear := .hiredateYear }}
                     {{ range .year }}
-                    <option value="{{ .year }}">{{ .year }}</option>
+                        {{ if eqal . $hiredateYear}}
+                        <option value="{{ . }}" selected>{{ . }}</option>
+                        {{ else }}
+                        <option value="{{ . }}">{{ . }}</option>
+                        {{ end }}
                     {{ end}}
                 </select>
                 年
                 <select name="addEmpHiredateMonth" id="addEmpHiredateMonth">
                     <option value="">選択してください</option>
-                    
+                    {{ $hiredateMonth := .hiredateMonth}}
+                    {{ range .month}}
+                        {{ if eqal . $hiredateMonth}}
+                        <option value="{{ . }}" selected>{{ . }}</option>
+                        {{ else }}
+                        <option value="{{ . }}">{{ . }}</option>
+                        {{ end }}
+                    {{ end }}
                 </select>
                 月
                 <select name="addEmpHiredateDay" id="addEmpHiredateDay">
                     <option value="">選択してください</option>
+                    {{ $hiredateDay := .hiredateDay}}
+                    {{ range .day}}
+                        {{ if eqal . $hiredateDay}}
+                        <option value="{{ . }}" selected>{{ . }}</option>
+                        {{ else }}
+                        <option value="{{ . }}">{{ . }}</option>
+                        {{ end }}
+                    {{ end }}
 
                 </select>
                 日
@@ -104,7 +129,7 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="2" class="submit"><input type="submit" value="登録"></td>
+                <td colspan="2" class="submit"><input type="submit" value="編集"></td>
             </tr>
             </tbody>
         </table>

@@ -47,35 +47,78 @@
             <tr>
                 <th>上司番号&nbsp;<span class="required">必須</span></th>
                 <td>
+                    {{ $empList := .empList}}
+                    {{ with $field := field "addEmpMgr" . }}
                     <select name="addEmpMgr" id="addEmpMgr">
                         <option value="">選択してください</option>
-                        <option value="0">0:上司なし</option>
-                    {{ range .empList }}
-                        <option value="{{ .Empno }}">{{ .Empno }}:{{  .Ename }}</option>
+                        {{ if validEqMgr $field.Flash 0}}
+                            <option value="0" selected>0:上司なし</option>
+                        {{else}}
+                            <option value="0">0:上司なし</option>
+                        {{end}}
+                        {{ range $empList }}
+                            {{ if validEqMgr $field.Flash .Empno}}
+                                <option value="{{ .Empno }}" selected>{{ .Empno }}:{{  .Ename}}</option>
+                            {{ else }}
+                                <option value="{{ .Empno }}">{{ .Empno }}:{{  .Ename }}</option>
+                            {{ end }}
+                        {{ end }}
+                    </select>
                     {{ end }}
-					</select>
                 </td>
             </tr>
             <tr>
                 <th>雇用日&nbsp;<span class="required">必須</span></th>
                 <td>
-                    <select name="addEmpHiredateYear" id="addEmpHiredateYear">
+                {{ $hiredateYear := .hiredateYear }}
+                {{ $year := .year }}
+                {{ with $field := field "addEmpHiredateYear" . }}
+                <select name="addEmpHiredateYear" id="addEmpHiredateYear">
                     <option value="">選択してください</option>
-
+                    {{ range $year }}
+                        {{ if eqal . $field.Flash }}
+                        <option value="{{ . }}" selected>{{ . }}</option>
+                        {{ else }}
+                        <option value="{{ . }}">{{ . }}</option>
+                        {{ end }}
+                    {{ end}}
                 </select>
+                {{ end }}
                 年
+
+                {{ $month := .month}}
+                {{ $hiredateMonth := .hiredateMonth}}
+                {{ with $field := field "addEmpHiredateMonth" . }}
                 <select name="addEmpHiredateMonth" id="addEmpHiredateMonth">
                     <option value="">選択してください</option>
+                    {{ range $month}}
+                        {{ if eqal . $field.Flash}}
+                        <option value="{{ . }}" selected>{{ . }}</option>
+                        {{ else }}
+                        <option value="{{ . }}">{{ . }}</option>
+                        {{ end }}
+                    {{ end }}
                 </select>
+                {{ end }}
                 月
+
+                {{ $day := .day}}
+                {{ $hiredateDay := .hiredateDay}}
+                {{ with $field := field "addEmpHiredateDay" . }}
                 <select name="addEmpHiredateDay" id="addEmpHiredateDay">
                     <option value="">選択してください</option>
-
+                    {{ range $day}}
+                        {{ if eqal . $field.Flash}}
+                        <option value="{{ . }}" selected>{{ . }}</option>
+                        {{ else }}
+                        <option value="{{ . }}">{{ . }}</option>
+                        {{ end }}
+                    {{ end }}
                 </select>
+                {{ end }}
                 日
                 </td>
             </tr>
-
             <tr>
                 <th>給与&nbsp;<span class="required">必須</span></th>
                 {{ with $field := field "addEmpSal" . }}
@@ -91,14 +134,22 @@
             </tr>
             <tr>
                 <th>部門番号&nbsp;<span class="required">必須</span></th>
+                {{ $deptno := .deptno }}
+                {{ $deptList := .deptList}}
+                {{ with $field := field "addEmpDeptno" . }}
                 <td>
                     <select name="addEmpDeptno" id="addEmpDeptno">
                         <option value="">選択してください</option>
-                        {{ range .deptList }}
-                        <option value="{{ .Deptno }}">{{ .Deptno }}:{{ .Dname }}</option>
+                        {{ range $deptList }}
+                            {{ if eqal .Deptno $field.Flash}}
+                            <option value="{{ .Deptno }}" selected>{{ .Deptno }}:{{ .Dname }}</option>
+                            {{ else }}
+                            <option value="{{ .Deptno }}">{{ .Deptno }}:{{ .Dname }}</option>
+                            {{ end }}
                         {{ end }}
                     </select>
                 </td>
+                {{ end }}
             </tr>
             <tr>
                 <td colspan="2" class="submit"><input type="submit" value="登録"></td>
