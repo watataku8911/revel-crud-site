@@ -46,9 +46,9 @@
                     {{ $mgr := isNilMgr .mgr }}
                     <option value="">選択してください</option>
                     {{ if eqMgr $mgr 0}}
-                        <option value="0" selected>0:上司なし</option>
+                        <option value="<nil>" selected>0:上司なし</option>
                     {{else}}
-                        <option value="0">0:上司なし</option>
+                        <option value="<nil>">0:上司なし</option>
                     {{end}}
                     {{ range .empList }}
                         {{ if eqMgr $mgr .Empno}}
@@ -97,7 +97,6 @@
                         <option value="{{ . }}">{{ . }}</option>
                         {{ end }}
                     {{ end }}
-
                 </select>
                 日
                 </td>
