@@ -46,8 +46,8 @@
             <td>{{ isNilMgr .Mgr}}:{{ CurrencyFindByMgr $db .Mgr }}</td>
 
             <td>{{ CurrencyDateFormat .Hiredate}}</td>
-            <td style="text-align: right;">{{.Sal}}</td>
-            <td style="text-align: right;">{{ isNil .Comm}}</td>
+            <td style="text-align: right;">${{.Sal}}</td>
+            <td style="text-align: right;">${{ isNil .Comm}}</td>
             <td>{{ .Deptno }}:{{ CurrencyFindByPK $db .Deptno }}</td>
             <td>
                 <form action="/App/GoEmpEdit">

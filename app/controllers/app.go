@@ -207,10 +207,7 @@ func (c App) EmpList() revel.Result {
 		fmt.Println("から")
 	}
 
-
-
 	return c.Render(empList, db)
-
 }
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -271,7 +268,7 @@ func (c App) EmpAdd(addEmpEmpno string, addEmpEname string, addEmpJob string, ad
 	defer db.Close()
 	c.Validation.Required(addEmpEmpno).Message("従業員番号は必須です。")
 	c.Validation.Match(addEmpEmpno, regexp.MustCompile("[0-9]")).Message("従業員番号は数値で入力して下さい。")
-	c.Validation.Match(addEmpEmpno, regexp.MustCompile("[0-9]{4.}")).Message("従業員番号は数字4桁で入力して下さい。")
+	c.Validation.Match(addEmpEmpno, regexp.MustCompile("[0-9]{4}$")).Message("従業員番号は数字4桁で入力して下さい。")
 
 	c.Validation.Required(addEmpEname).Message("従業員名は必須です。")
 
@@ -300,11 +297,11 @@ func (c App) EmpAdd(addEmpEmpno string, addEmpEname string, addEmpJob string, ad
 		return c.Redirect(App.GoEmpAdd)
 	}
 
-	addEmpHiredate := addEmpHiredateYear + "-" + addEmpHiredateMonth + "-" +addEmpHiredateMonth
+	addEmpHiredate := addEmpHiredateYear + "-" + addEmpHiredateMonth + "-" + addEmpHiredateDay
 	empDAO.Insert(db, addEmpEmpno, addEmpEname, addEmpJob, addEmpMgr, addEmpHiredate, addEmpSal, addEmpComm, addEmpDeptno)
 	c.Flash.Success("従業員番号：" + addEmpEmpno + "を追加しました。")
 
-	return c.Redirect(App.DeptList)
+	return c.Redirect(App.EmpList)
 }
 // ---------------------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------- emp edit ------------------------------------------------------------
@@ -372,6 +369,55 @@ func (c App) GoEmpEdit(editEmpEmpno int) revel.Result {
 	}
 
 	return c.Render(deptList, empList, empno, ename, job, mgr, hiredateYear, hiredateMonth, hiredateDay, sal, comm, deptno, db, year, month, day)
+}
+
+func (c App) EmpEdit(addEmpEmpno string, addEmpEname string, addEmpJob string, addEmpMgr string, addEmpHiredateYear string, addEmpHiredateMonth string, addEmpHiredateDay string, addEmpSal string, addEmpComm string, addEmpDeptno string) revel.Result {
+	db, err := sql.Open("mysql", "scott:tiger@tcp(127.0.0.1:8889)/wp32scott")//通常：ポート番号３３０６、＊manp:8889
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = db.Ping()
+	if err != nil {
+		fmt.Println("データベース接続失敗")
+		return c.Redirect(App.Error)
+	}
+	defer db.Close()
+	c.Validation.Required(addEmpEmpno).Message("従業員番号は必須です。")
+	c.Validation.Match(addEmpEmpno, regexp.MustCompile("[0-9]")).Message("従業員番号は数値で入力して下さい。")
+	c.Validation.Match(addEmpEmpno, regexp.MustCompile("[0-9]{4}$")).Message("従業員番号は数字4桁で入力して下さい。")
+
+	c.Validation.Required(addEmpEname).Message("従業員名は必須です。")
+
+	c.Validation.Required(addEmpJob).Message("役職は必須です。")
+
+	c.Validation.Required(addEmpMgr).Message("上司を選択してください")
+
+	c.Validation.Required(addEmpHiredateYear).Message("年を選択してください")
+	c.Validation.Required(addEmpHiredateMonth).Message("月を選択してください")
+	c.Validation.Required(addEmpHiredateDay).Message("日を選択してください")
+
+
+
+
+	c.Validation.Required(addEmpSal).Message("給与は必須です。")
+	c.Validation.Match(addEmpSal, regexp.MustCompile("^[0-9,，.．]+")).Message("給与は数値で入力して下さい。")
+
+	c.Validation.Required(addEmpComm).Message("歩合は必須です。")
+	c.Validation.Match(addEmpComm, regexp.MustCompile("^[0-9,，.．]+")).Message("歩合は数値で入力して下さい。")
+
+	c.Validation.Required(addEmpDeptno).Message("部門番号を選択してください")
+
+	if c.Validation.HasErrors() {
+		c.Validation.Keep()
+		c.FlashParams()
+		return c.Redirect(App.GoEmpAdd)
+	}
+
+	addEmpHiredate := addEmpHiredateYear + "-" + addEmpHiredateMonth + "-" + addEmpHiredateDay
+	empDAO.Update(db, addEmpEmpno, addEmpEname, addEmpJob, addEmpMgr, addEmpHiredate, addEmpSal, addEmpComm, addEmpDeptno)
+	c.Flash.Success("従業員番号：" + addEmpEmpno + "を編集しました。")
+
+	return c.Redirect(App.EmpList)
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------
@@ -458,32 +504,34 @@ func CurrencyDateFormat(date string) string {
 func CurrencyFindByMgr(db *sql.DB, mgr *int) string {
 	var ename string
 	if mgr != nil{
-		db, err := sql.Open("mysql", "scott:tiger@tcp(127.0.0.1:8889)/wp32scott")//通常：ポート番号３３０６、＊manp:8889
-		if err != nil {
-			log.Fatal(err)
+		if *mgr == 0 {
+			ename = "上司なし"
+		} else {
+			db, err := sql.Open("mysql", "scott:tiger@tcp(127.0.0.1:8889)/wp32scott")//通常：ポート番号３３０６、＊manp:8889
+			if err != nil {
+				log.Fatal(err)
+			}
+			err = db.Ping()
+			if err != nil {
+				fmt.Println("データベース接続失敗")
+			}
+
+			defer db.Close()
+			emp := empDAO.FindByMgr(db, mgr)
+			if emp == nil {
+				fmt.Println("空")
+			}
+			ename = emp.Ename
 		}
-		err = db.Ping()
-		if err != nil {
-			fmt.Println("データベース接続失敗")
-		}
-
-		defer db.Close()
-		emp := empDAO.FindByMgr(db, mgr)
-		if emp == nil {
-			fmt.Println("空")
-		}
-
-		ename = emp.Ename
-
-
 	} else {
 		ename = "上司なし"
 	}
+	
 	return ename
 }
 
 func isNil(comm *string) *string{
-	Comm := ""
+	Comm := "0.00"
 	if comm == nil {
 		comm = &Comm
 	}

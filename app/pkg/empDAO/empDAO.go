@@ -39,17 +39,15 @@ func FindByPkCount(db *sql.DB, empno int) int{
 }
 
 func FindByMgr(db *sql.DB, mgr *int) *emp.Emp {
+	var e emp.Emp
 	stmt, err := db.Prepare("SELECT ename FROM emp WHERE empno = ?")
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	var e emp.Emp
 	err = stmt.QueryRow(&mgr).Scan(&e.Ename)
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	return &e
 }
 
@@ -114,12 +112,12 @@ func Update(db *sql.DB, empno, ename, job, mgr, hiredate, sal, comm, deptno stri
 	if err != nil {
 		log.Fatal(err)
 	}
-	stmt, err := db.Prepare("UPDATE emp SET dname=?,loc=? WHERE empno=?")
+	stmt, err := db.Prepare("UPDATE emp SET ename=?, job=?, mgr=?, hiredate=?, sal=?, comm=?, deptno=? WHERE empno=?")
 	if err != nil {
 		log.Fatal(err)
 		tr.Rollback()
 	}
-	res, err := stmt.Exec(empno, ename, job, mgr, hiredate, sal, comm, deptno)
+	res, err := stmt.Exec(ename, job, mgr, hiredate, sal, comm, deptno, empno)
 	if err != nil {
 		log.Fatal(err)
 		tr.Rollback()
