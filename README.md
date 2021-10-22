@@ -31,6 +31,9 @@ $ revel run アプリケーション名
 <hr></hr>
 
 ```
+# DB作成
+CREATE DATABASE `wp32scott` CHARACTER SET utf8;
+
 # 部門テーブル
 CREATE TABLE `dept` (
   `deptno` int(2) NOT NULL DEFAULT '0',
